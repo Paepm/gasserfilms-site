@@ -4,210 +4,280 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
 /**
- * Add more videos here. For now we use placeholders (no thumbnails yet).
- * Later: add thumbnail: "/uploads/thumbnails/xyz.webp"
- * Tip for YouTube: use https://www.youtube-nocookie.com/embed/<VIDEO_ID>
+ * YouTube-based portfolio grid:
+ * - Hover (desktop): injects muted autoplay preview iframe (best effort)
+ * - Click: opens fullscreen-like overlay (and tries browser fullscreen)
+ *
+ * NOTE: External media is gated by your consent system (gf_consent_v1).
  */
+
 const VIDEOS = [
-  {
-    title: "Red Bull – Energy Spot",
-    year: "2025",
-    tags: ["Commercial", "Sports"],
-    embedUrl: "https://www.youtube-nocookie.com/embed/VIDEO_ID",
-    fallbackLink: "https://www.youtube.com/watch?v=VIDEO_ID",
-    // thumbnail: "/uploads/thumbnails/redbull.webp"
-  },
-  {
-    title: "WKO – Corporate Film",
-    year: "2024",
-    tags: ["Corporate"],
-    embedUrl: "https://player.vimeo.com/video/123456789",
-    fallbackLink: "https://vimeo.com/123456789",
-  },
-  {
-    title: "Event Recap – Vienna",
-    year: "2024",
-    tags: ["Event", "Recap"],
-    embedUrl: "https://www.youtube-nocookie.com/embed/VIDEO_ID_2",
-    fallbackLink: "https://www.youtube.com/watch?v=VIDEO_ID_2",
-  },
+  { id: "lYdHO-mGG3E", title: "Showreel 2026", category: "Cinematography" },
+  { id: "VIDEO_ID_2", title: "Red Bull – Energy Spot", category: "Commercial" },
+  { id: "VIDEO_ID_3", title: "WKO – Corporate Film", category: "Corporate" },
+  { id: "VIDEO_ID_4", title: "Event Recap – Vienna", category: "Event" },
 ];
 
-function safeIdFromTitle(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+// thumbnails (you can later replace with local thumbnails in /public/)
+const thumbUrl = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+
+// hover preview (muted autoplay, no controls)
+const previewEmbed = (id) =>
+  `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1`;
+
+// modal playback (controls on)
+const playEmbed = (id) =>
+  `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0&playsinline=1`;
 ---
 
 <BaseLayout title="Portfolio | Gasser Films">
   <Header />
 
   <main class="mx-auto max-w-6xl px-4 py-12 md:py-16">
-    <header class="mb-10">
+    <header class="mb-10 text-center">
       <h1 class="text-3xl font-semibold md:text-4xl">Portfolio</h1>
-      <p class="mt-3 max-w-2xl text-neutral-300">
-        Auswahl an Projekten & Videos. Klicke eine Karte, um das Video zu öffnen.
-      </p>
     </header>
 
-    <!-- Grid -->
-    <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {VIDEOS.map((v) => {
-        const dialogId = `video-${safeIdFromTitle(v.title)}`;
-        return (
-          <article class="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 transition hover:border-white/25 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]">
-            <!-- Placeholder / Thumbnail area -->
-            <button
-              type="button"
-              class="relative block w-full"
-              aria-label={`Open video: ${v.title}`}
-              data-open={dialogId}
-            >
-              <div class="aspect-video w-full bg-neutral-900/70">
-                {/* If you later add v.thumbnail, replace this with <img ... /> */}
-                <div class="flex h-full w-full items-center justify-center">
-                  <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-neutral-950/60 px-4 py-3 text-sm text-neutral-200 backdrop-blur">
-                    <span class="inline-block h-2.5 w-2.5 rounded-full bg-white/40"></span>
-                    <span>Video preview</span>
-                    <span class="text-neutral-400">(coming soon)</span>
-                  </div>
-                </div>
-              </div>
+    <!-- Simple 2-column grid like your reference -->
+    <section class="grid gap-4 sm:grid-cols-2">
+      {VIDEOS.map((v) => (
+        <button
+          type="button"
+          class="group relative overflow-hidden rounded-2xl border border-white/10 bg-black text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+          data-tile
+          data-id={v.id}
+          data-preview={previewEmbed(v.id)}
+          data-play={playEmbed(v.id)}
+          aria-label={`Open video: ${v.title}`}
+        >
+          <div class="relative aspect-video w-full">
+            <!-- Default: thumbnail -->
+            <img
+              src={thumbUrl(v.id)}
+              alt={v.title}
+              loading="lazy"
+              class="h-full w-full object-cover opacity-90 transition group-hover:opacity-100"
+              data-thumb
+            />
 
-              <!-- Hover overlay -->
-              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition group-hover:opacity-100"></div>
-            </button>
-
-            <!-- Meta -->
-            <div class="p-5">
-              <div class="flex items-start justify-between gap-3">
-                <h2 class="text-base font-semibold text-neutral-100">{v.title}</h2>
-                <span class="shrink-0 text-xs text-neutral-400">{v.year}</span>
-              </div>
-
-              {v.tags?.length ? (
-                <div class="mt-3 flex flex-wrap gap-2">
-                  {v.tags.map((t) => (
-                    <span class="rounded-full border border-white/10 bg-neutral-900 px-2.5 py-1 text-xs text-neutral-300">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-
-              <div class="mt-4">
-                <button
-                  type="button"
-                  data-open={dialogId}
-                  class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-neutral-900/60 px-3 py-2 text-sm text-neutral-200 transition hover:border-white/25 hover:text-white"
-                >
-                  Watch
-                  <span aria-hidden="true">→</span>
-                </button>
+            <!-- Hover overlay (play icon) -->
+            <div class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
+              <div class="rounded-full bg-black/40 px-4 py-3 text-sm text-white backdrop-blur">
+                ▶ Preview
               </div>
             </div>
 
-            <!-- Modal (native <dialog>) -->
-            <dialog
-              id={dialogId}
-              class="backdrop:bg-black/70 backdrop:backdrop-blur-sm rounded-2xl border border-white/10 bg-neutral-950 text-neutral-100 w-[min(920px,92vw)] p-0"
-            >
-              <div class="flex items-center justify-between gap-3 border-b border-white/10 p-4">
-                <div class="min-w-0">
-                  <p class="truncate text-sm font-semibold">{v.title}</p>
-                  <p class="text-xs text-neutral-400">{v.year}</p>
-                </div>
+            <!-- subtle gradient (keeps it cinematic) -->
+            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/65 to-transparent"></div>
 
-                <form method="dialog">
-                  <button
-                    class="rounded-xl border border-white/10 bg-neutral-900/60 px-3 py-2 text-sm text-neutral-200 hover:border-white/25 hover:text-white"
-                    aria-label="Close"
-                  >
-                    Close
-                  </button>
-                </form>
-              </div>
-
-              <div class="p-4">
-                {v.embedUrl ? (
-                <div class="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black">
-                  <div
-                    class="h-full w-full"
-                    data-external-src={v.embedUrl}
-                    data-external-title={`Video: ${v.title}`}
-                    data-external-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  >
-                    <div class="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
-                      <p class="text-sm text-neutral-200">Video ist blockiert.</p>
-                      <p class="text-xs text-neutral-400">
-                        Zum Abspielen musst du externe Medien erlauben.
-                      </p>
-                      <button
-                        type="button"
-                        data-allow-external
-                        class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
-                      >
-                        Video laden
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div class="rounded-2xl border border-white/10 bg-neutral-900/30 p-6 text-sm text-neutral-300">
-                  Dieses Video ist nicht direkt eingebettet.
-                </div>
-              )}
-
-                {v.fallbackLink ? (
-                  <div class="mt-4 flex items-center justify-between gap-3">
-                    <a
-                      class="text-sm underline decoration-white/20 underline-offset-4 hover:decoration-white/50"
-                      href={v.fallbackLink}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      Open in new tab →
-                    </a>
-                    <p class="text-xs text-neutral-500">
-                      (Später: Consent Gate für externe Medien)
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-            </dialog>
-          </article>
-        );
-      })}
+            <!-- labels -->
+            <div class="pointer-events-none absolute bottom-3 left-3 right-3">
+              <p class="text-sm font-semibold text-white">{v.title}</p>
+              <p class="mt-0.5 text-xs text-white/70">{v.category}</p>
+            </div>
+          </div>
+        </button>
+      ))}
     </section>
   </main>
 
   <Footer />
 
-  <!-- Tiny vanilla JS to open/close dialogs -->
+  <!-- Fullscreen overlay (modal) -->
+  <div
+    id="yt-modal"
+    class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 p-4 backdrop-blur"
+    aria-hidden="true"
+  >
+    <div class="w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-neutral-950">
+      <div class="flex items-center justify-between gap-3 border-b border-white/10 p-4">
+        <p id="yt-modal-title" class="truncate text-sm font-semibold text-neutral-100">Video</p>
+        <div class="flex items-center gap-2">
+          <button
+            id="yt-modal-fs"
+            type="button"
+            class="rounded-xl border border-white/10 bg-neutral-900/60 px-3 py-2 text-sm text-neutral-200 hover:border-white/25 hover:text-white"
+          >
+            Fullscreen
+          </button>
+          <button
+            id="yt-modal-close"
+            type="button"
+            class="rounded-xl border border-white/10 bg-neutral-900/60 px-3 py-2 text-sm text-neutral-200 hover:border-white/25 hover:text-white"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+
+      <div class="p-4">
+        <div class="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black">
+          <!-- We use your existing consent gating:
+               This host becomes an iframe only if externalMedia is allowed. -->
+          <div
+            id="yt-modal-host"
+            class="h-full w-full"
+            data-external-src=""
+            data-external-title="YouTube Video"
+            data-external-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          >
+            <div class="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
+              <p class="text-sm text-neutral-200">Video ist blockiert.</p>
+              <p class="text-xs text-neutral-400">
+                Zum Abspielen musst du externe Medien erlauben.
+              </p>
+              <button
+                type="button"
+                data-allow-external
+                class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
+              >
+                Video laden
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-3 text-xs text-neutral-500">
+          Hinweis: YouTube lädt erst nach Zustimmung (Cookie-Einstellungen).
+        </p>
+      </div>
+    </div>
+  </div>
+
   <script is:inline>
     (() => {
-      const openButtons = document.querySelectorAll("[data-open]");
-      openButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-open");
-          const dlg = document.getElementById(id);
-          if (dlg && typeof dlg.showModal === "function") dlg.showModal();
+      const CONSENT_KEY = "gf_consent_v1";
+      const tiles = document.querySelectorAll("[data-tile]");
+
+      const modal = document.getElementById("yt-modal");
+      const modalHost = document.getElementById("yt-modal-host");
+      const modalTitle = document.getElementById("yt-modal-title");
+      const btnClose = document.getElementById("yt-modal-close");
+      const btnFs = document.getElementById("yt-modal-fs");
+
+      // store original tile innerHTML so we can restore after hover preview
+      const restoreMap = new WeakMap();
+
+      function getConsent() {
+        try {
+          const raw = localStorage.getItem(CONSENT_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch {
+          return null;
+        }
+      }
+      function externalAllowed() {
+        return getConsent()?.externalMedia === true;
+      }
+
+      // Hover preview (desktop only-ish)
+      tiles.forEach((tile) => {
+        tile.addEventListener("pointerenter", () => {
+          // don't preview if no consent
+          if (!externalAllowed()) return;
+
+          // don't preview on touch devices (optional safety)
+          if (window.matchMedia("(hover: none)").matches) return;
+
+          if (!restoreMap.has(tile)) restoreMap.set(tile, tile.innerHTML);
+
+          const src = tile.getAttribute("data-preview");
+          const title = tile.getAttribute("aria-label") || "Video preview";
+
+          // Replace thumbnail with iframe preview
+          tile.innerHTML = `
+            <div class="relative aspect-video w-full">
+              <iframe
+                class="h-full w-full"
+                src="${src}"
+                title="${title}"
+                loading="lazy"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+            </div>
+          `;
+        });
+
+        tile.addEventListener("pointerleave", () => {
+          const original = restoreMap.get(tile);
+          if (original) tile.innerHTML = original;
+        });
+
+        // Click -> open modal (fullscreen-like)
+        tile.addEventListener("click", () => {
+          const id = tile.getAttribute("data-id");
+          const playSrc = tile.getAttribute("data-play");
+          const label = tile.querySelector("p")?.textContent || "Video";
+
+          modalTitle.textContent = label;
+
+          // set data-external-src so your global gating can mount iframe after consent
+          modalHost.setAttribute("data-external-src", playSrc);
+          modalHost.setAttribute("data-mounted", "0");
+          modalHost.innerHTML = `
+            <div class="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
+              <p class="text-sm text-neutral-200">Video ist blockiert.</p>
+              <p class="text-xs text-neutral-400">
+                Zum Abspielen musst du externe Medien erlauben.
+              </p>
+              <button
+                type="button"
+                data-allow-external
+                class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
+              >
+                Video laden
+              </button>
+            </div>
+          `;
+
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+          modal.setAttribute("aria-hidden", "false");
+
+          // Try to enter browser fullscreen on open (best effort)
+          if (modal.requestFullscreen) {
+            modal.requestFullscreen().catch(() => {});
+          }
+
+          // If consent already exists, trigger mount immediately
+          document.dispatchEvent(new CustomEvent("consentchange", { detail: getConsent() || {} }));
         });
       });
 
-      // Close dialog when clicking on backdrop (outside the dialog content)
-      document.querySelectorAll("dialog").forEach((dlg) => {
-        dlg.addEventListener("click", (e) => {
-          const rect = dlg.getBoundingClientRect();
-          const clickedInDialog =
-            e.clientX >= rect.left &&
-            e.clientX <= rect.right &&
-            e.clientY >= rect.top &&
-            e.clientY <= rect.bottom;
-          if (!clickedInDialog) dlg.close();
-        });
+      function closeModal() {
+        // stop playback by clearing host (prevents sound continuing)
+        modalHost.setAttribute("data-external-src", "");
+        modalHost.innerHTML = "";
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        modal.setAttribute("aria-hidden", "true");
+
+        // exit fullscreen if active
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      btnClose?.addEventListener("click", closeModal);
+
+      // click backdrop to close
+      modal?.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      // ESC closes
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+      });
+
+      // Fullscreen button (best effort)
+      btnFs?.addEventListener("click", () => {
+        if (!document.fullscreenElement && modal.requestFullscreen) {
+          modal.requestFullscreen().catch(() => {});
+        }
       });
     })();
   </script>
