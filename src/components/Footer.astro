@@ -56,12 +56,14 @@ const partners = [
       <div class="flex gap-4">
         <a class="hover:text-white transition-transform duration-150 ease-out transition-transform duration-150 ease-out hover:scale-115 focus-visible:scale-115 active:scale-105" href="/imprint">Impressum</a>
         <a class="hover:text-white  transition-transform duration-150 ease-out transition-transform duration-150 ease-out hover:scale-115 focus-visible:scale-115 active:scale-105" href="/privacy">Datenschutz</a>
-        <button
-          type="button"
-          class="hover:text-white transition-transform duration-150 ease-out transition-transform duration-150 ease-out hover:scale-115 focus-visible:scale-115 active:scale-105"
-          onclick="window.__openCookieSettings && window.__openCookieSettings()">
+        <a
+          href="#"
+          role="button"
+          class="cursor-pointer hover:text-white transition-transform duration-150 ease-out hover:scale-115 focus-visible:scale-115 active:scale-105"
+          onclick="window.__openCookieSettings && window.__openCookieSettings(); return false;"
+        >
           Cookie-Einstellungen
-        </button>
+        </a>
       </div>
     </div>
   </div>
