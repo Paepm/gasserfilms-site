@@ -11,91 +11,88 @@ const partners = [
   { name: "OBI", src: "/imgs/obi.png", href: "https://www.obi.at" },
   { name: "Red Bull", src: "/imgs/redbull.png", href: "https://www.redbull.com" },
   { name: "WKO", src: "/imgs/wko.png", href: "https://www.wko.at" },
-  { name: "Böschreisen", src: "/imgs/böschreisen.png", href: "https://www..at" },
+  // TODO: fix link
+  { name: "Böschreisen", src: "/imgs/böschreisen.png", href: "#" },
   { name: "Pro7", src: "/imgs/pro7.png", href: "https://www.prosiebensat1.com/" },
   { name: "ATV", src: "/imgs/atv.png", href: "https://www.atv.at" },
-  { name: "LandRover", src: "/imgs/landrover.png", href: "https://www.landrover.com" },
+  { name: "Land Rover", src: "/imgs/landrover.png", href: "https://www.landrover.com" },
   { name: "Puls4", src: "/imgs/puls4.png", href: "https://www.prosiebensat1puls4.com/" },
 ];
 
 const SOCIALS = [
-  { label: "Facebook", href: "https://www.facebook.com/christof.gasser.10/?locale=de_DE", svg: FacebookIcon },
   { label: "Instagram", href: "https://www.instagram.com/gassinho/", svg: InstagramIcon },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/christof-gasser-16504a33a/", svg: LinkedInIcon },
   { label: "YouTube", href: "https://www.youtube.com/@GasserFilms", svg: YouTubeIcon },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/christof-gasser-16504a33a/", svg: LinkedInIcon },
+  // optional:
+  { label: "Facebook", href: "https://www.facebook.com/christof.gasser.10/?locale=de_DE", svg: FacebookIcon },
 ];
 ---
 
 <footer class="mt-16 border-t border-white/10">
   <div class="mx-auto max-w-6xl px-4 py-10 text-sm text-neutral-400">
-    <!-- Top area: Socials (1/8) + Partners (7/8) -->
-    <section class="mb-10">
-      <div class="grid gap-8 md:grid-cols-8">
-        <!-- Socials: 1/8 -->
-        <aside class="md:col-span-1">
-          <div class="flex items-center gap-3">
-            <h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-300">
-              Socials
-            </h2>
-            <div class="h-px flex-1 bg-white/10 md:hidden"></div>
-          </div>
+    <!-- Top: Social icons + Partners -->
+    <section class="mb-10 grid gap-8 md:grid-cols-12">
+      <!-- Socials: icons only -->
+      <aside class="md:col-span-3">
+        <div class="flex items-center gap-4">
+          <div class="h-px flex-1 bg-white/10"></div>
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-300">
+            Socials
+          </h2>
+          <div class="h-px flex-1 bg-white/10"></div>
+        </div>
 
-          <div class="mt-4 flex flex-col gap-2">
-            {SOCIALS.map((s) => (
-              <a
-                href={s.href}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={s.label}
-                title={s.label}
-                class="group inline-flex items-center gap-2 rounded-xl border border-white/10 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-200 transition-transform duration-150 ease-out hover:border-white/25 hover:bg-neutral-900/40 hover:scale-115 focus-visible:scale-115 active:scale-105"
-              >
-                <s.svg />
-                <span class="truncate">{s.label}</span>
-              </a>
-            ))}
-          </div>
-        </aside>
+        <div class="mt-4 flex flex-wrap gap-1 items-center justify-evenly">
+          {SOCIALS.map((s) => (
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label={s.label}
+              title={s.label}
+              class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-neutral-950/30 text-neutral-200 transition hover:border-white/25 hover:bg-neutral-900/40 hover:text-white hover:scale-110 focus-visible:scale-110 active:scale-95"
+            >
+              <s.svg />
+            </a>
+          ))}
+        </div> 
+      </aside>
 
-        <!-- Partners: 7/8 -->
-        <div class="md:col-span-7">
-          <div class="flex items-center gap-4">
-            <h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-300">
-              Partner
-            </h2>
-            <div class="h-px flex-1 bg-white/10"></div>
-          </div>
+      <!-- Partners -->
+      <div class="md:col-span-9">
+        <div class="flex items-center gap-4">
+          <div class="h-px flex-1 bg-white/10"></div>
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-300">
+            Partner
+          </h2>
+          <div class="h-px flex-1 bg-white/10"></div>
+        </div>
 
-          <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {partners.map((p) => (
-              <a
-                href={p.href}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={p.name}
-                title={p.name}
-                class="group flex h-20 items-center justify-center rounded-2xl border border-white/10 bg-neutral-950/40 p-4 transition-transform duration-150 ease-out hover:border-white/25 hover:bg-neutral-900/40 hover:scale-115 focus-visible:scale-115 active:scale-105"
-              >
-                <img
-                  src={p.src}
-                  alt={p.name}
-                  loading="lazy"
-                  class="max-h-10 w-full object-contain opacity-90 transition group-hover:opacity-100"
-                />
-              </a>
-            ))}
-          </div>
-
-          <p class="mt-4 text-xs text-neutral-500">
-            Logos sind Eigentum der jeweiligen Marken/Partner.
-          </p>
+        <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {partners.map((p) => (
+            <a
+              href={p.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label={p.name}
+              title={p.name}
+              class="group flex h-16 items-center justify-center rounded-2xl border border-white/10 bg-neutral-950/30 text-neutral-200 transition hover:border-white/25 hover:bg-neutral-900/40 hover:text-white hover:scale-110 focus-visible:scale-110 active:scale-95"
+            >
+              <img
+                src={p.src}
+                alt={p.name}
+                loading="lazy"
+                class="max-h-9 w-full object-contain opacity-90 transition group-hover:opacity-100"
+              />
+            </a>
+          ))}
         </div>
       </div>
     </section>
 
     <!-- Bottom -->
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-      <p>© {new Date().getFullYear()} Gasser Films</p>
+      <p>© Gasser Films</p>
 
       <div class="flex flex-wrap gap-4">
         <a
