@@ -1,0 +1,62 @@
+---
+const partners = [
+  { name: "ORF", src: "../src/components/imgs/orf.png", href: "https://orf.at" },
+  { name: "Licht ins Dunkel", src: "./src/components/imgs/lichtinsdunkel.png", href: "https://lichtinsdunkel.orf.at" },
+  { name: "Stadt Wien", src: "./src/components/imgs/stadtwien.png", href: "https://www.wien.gv.at" },
+  { name: "OBI", src: "./src/components/imgs/obi.png", href: "https://www.obi.at" },
+  { name: "Red Bull", src: "./src/components/imgs/redbull.png", href: "https://www.redbull.com" },
+  { name: "WKO", src: "./src/components/imgs/wko.png", href: "https://www.wko.at" },
+  { name: "Böschreisen", src: "./src/components/imgs/böschreisen.png", href: "https://www..at" },
+  { name: "Pro7", src: "./src/components/imgs/pro7.png", href: "https://www.pro7.at" },
+  { name: "ATV", src: "./src/components/imgs/atv.png", href: "https://www.atv.at" },
+  { name: "LandRover", src: "./src/components/imgs/landrover.png", href: "https://www.landrover.com" },
+  { name: "Puls4", src: "./src/components/imgs/puls4.png", href: "https://www.puls4.com" },
+];
+---
+
+<footer class="mt-16 border-t border-white/10">
+  <div class="mx-auto max-w-6xl px-4 py-10 text-sm text-neutral-400">
+    <!-- Partners -->
+    <section class="mb-10">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-300">
+          Partner
+        </h2>
+        <div class="h-px flex-1 bg-white/10"></div>
+      </div>
+
+      <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {partners.map((p) => (
+          <a
+            href={p.href}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label={p.name}
+            title={p.name}
+            class="group flex h-20 items-center justify-center rounded-2xl border border-white/10 bg-neutral-950/40 p-4 transition hover:border-white/25 hover:bg-neutral-900/40  hover:scale-115"
+          >
+            <img
+              src={p.src}
+              alt={p.name}
+              loading="lazy"
+              class="max-h-10 w-full object-contain opacity-90 transition group-hover:opacity-100"
+            />
+          </a>
+        ))}
+      </div>
+
+      <p class="mt-4 text-xs text-neutral-500">
+        Logos sind Eigentum der jeweiligen Marken/Partner.
+      </p>
+    </section>
+
+    <!-- Bottom -->
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <p>© {new Date().getFullYear()} Gasser Films</p>
+      <div class="flex gap-4">
+        <a class="hover:text-white hover:scale-115" href="/imprint">Impressum</a>
+        <a class="hover:text-white  hover:scale-115" href="/privacy">Datenschutz</a>
+      </div>
+    </div>
+  </div>
+</footer>

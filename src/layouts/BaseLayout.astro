@@ -1,0 +1,25 @@
+---
+import "../styles/global.css";
+const { title = "Gasser Films", description = "" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+
+    <link rel="icon" href="/favicon.svg" />
+  </head>
+
+  <body class="relative min-h-screen bg-neutral-950 text-neutral-100">
+  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-40 left-1/2 h-[520px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-r from-fuchsia-500/15 via-red-500/10 to-orange-400/15 blur-3xl"></div>
+    <div class="absolute bottom-[-240px] right-[-240px] h-[520px] w-[520px] rounded-full bg-gradient-to-tr from-sky-500/10 via-indigo-500/10 to-purple-500/10 blur-3xl"></div>
+  </div>
+
+  <slot />
+</body>
+</html>

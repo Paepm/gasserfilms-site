@@ -1,11 +1,41 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="Gasser Films">
+  <Header />
+
+  <main class="mx-auto max-w-6xl px-4">
+    <section class="py-16 md:py-24">
+      <p class="text-sm uppercase tracking-widest text-neutral-400">Film & Video Production</p>
+      <h1 class="mt-4 text-4xl font-semibold leading-tight md:text-6xl">
+        Cinematic storytelling for brands & artists.
+      </h1>
+      <p class="mt-6 max-w-2xl text-base text-neutral-300 md:text-lg">
+        Short, clean, modern — like Wix, but faster and yours.
+      </p>
+
+      <div class="mt-10 flex gap-3">
+        <a href="/portfolio" class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200  hover:scale-115">
+          View Portfolio
+        </a>
+        <a href="/contact" class="rounded-xl border border-white/15 px-4 py-2 text-sm hover:border-white/30  hover:scale-115">
+          Contact
+        </a>
+      </div>
+    </section>
+
+    <section class="pb-16">
+      <h2 class="text-xl font-semibold">Featured Projects</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 p-4">Project 1</div>
+        <div class="rounded-2xl border border-white/10 p-4">Project 2</div>
+        <div class="rounded-2xl border border-white/10 p-4">Project 3</div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

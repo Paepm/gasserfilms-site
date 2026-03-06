@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Anta";
+  src: url("fonts/Anta/Anta-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+    color-scheme: dark;
+}
+
+body {
+  font-family: "Anta", ui-sans-serif, system-ui;
+}

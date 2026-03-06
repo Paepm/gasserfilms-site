@@ -1,0 +1,114 @@
+---
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/about", label: "Über mich" },
+  { href: "/contact", label: "Kontakt" },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+    <!-- Brand -->
+    <a href="/" class="text-lg font-semibold tracking-wide transition hover:scale-110">
+      Gasser Films
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden items-center gap-6 md:flex" aria-label="Main navigation">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="text-sm text-neutral-200 transition hover:text-white hover:scale-110"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Right side: Desktop CTA + Mobile Burger -->
+    <div class="flex items-center gap-3">
+      <!-- Desktop CTA -->
+      <a
+        href="/requests"
+        class="hidden rounded-xl border border-white/15 px-3 py-2 text-sm text-neutral-200 transition hover:border-white/50 hover:scale-110 md:inline-flex"
+      >
+        Anfrage
+      </a>
+
+      <!-- Mobile Burger -->
+      <button
+        type="button"
+        class="inline-flex items-center justify-center rounded-xl border border-white/15 bg-neutral-950/60 p-2 text-neutral-200 transition hover:border-white/30 hover:text-white md:hidden"
+        aria-label="Open menu"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        data-menu-button
+      >
+        <svg viewBox="0 0 24 24" class="h-6 w-6" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M4 6.5h16v2H4v-2Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-white/10 bg-neutral-950/95 backdrop-blur md:hidden"
+    data-mobile-menu
+  >
+    <div class="mx-auto max-w-6xl px-4 py-4">
+      <nav class="flex flex-col gap-2" aria-label="Mobile navigation">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-xl border border-white/10 bg-neutral-900/40 px-4 py-3 text-sm text-neutral-200 transition hover:border-white/25 hover:text-white"
+            data-mobile-link
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      <a
+        href="/requests"
+        class="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-medium text-neutral-950 transition hover:bg-neutral-200"
+        data-mobile-link
+      >
+        Anfrage
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const btn = document.querySelector("[data-menu-button]");
+      const menu = document.querySelector("[data-mobile-menu]");
+      if (!btn || !menu) return;
+
+      const setOpen = (open) => {
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        menu.classList.toggle("hidden", !open);
+      };
+
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        setOpen(!isOpen);
+      });
+
+      // Close when clicking a link
+      menu.querySelectorAll("[data-mobile-link]").forEach((link) => {
+        link.addEventListener("click", () => setOpen(false));
+      });
+
+      // Close on Escape
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") setOpen(false);
+      });
+    })();
+  </script>
+</header>
