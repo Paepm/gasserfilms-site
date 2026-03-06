@@ -132,22 +132,33 @@ function safeIdFromTitle(title) {
 
               <div class="p-4">
                 {v.embedUrl ? (
-                  <div class="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black">
-                    <iframe
-                      class="h-full w-full"
-                      src={v.embedUrl}
-                      loading="lazy"
-                      title={`Video: ${v.title}`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                      referrerpolicy="no-referrer-when-downgrade"
-                    />
+                <div class="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black">
+                  <div
+                    class="h-full w-full"
+                    data-external-src={v.embedUrl}
+                    data-external-title={`Video: ${v.title}`}
+                    data-external-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  >
+                    <div class="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
+                      <p class="text-sm text-neutral-200">Video ist blockiert.</p>
+                      <p class="text-xs text-neutral-400">
+                        Zum Abspielen musst du externe Medien erlauben.
+                      </p>
+                      <button
+                        type="button"
+                        data-allow-external
+                        class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
+                      >
+                        Video laden
+                      </button>
+                    </div>
                   </div>
-                ) : (
-                  <div class="rounded-2xl border border-white/10 bg-neutral-900/30 p-6 text-sm text-neutral-300">
-                    Dieses Video ist nicht direkt eingebettet.
-                  </div>
-                )}
+                </div>
+              ) : (
+                <div class="rounded-2xl border border-white/10 bg-neutral-900/30 p-6 text-sm text-neutral-300">
+                  Dieses Video ist nicht direkt eingebettet.
+                </div>
+              )}
 
                 {v.fallbackLink ? (
                   <div class="mt-4 flex items-center justify-between gap-3">

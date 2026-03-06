@@ -1,0 +1,151 @@
+---
+const CONSENT_KEY = "gf_consent_v1";
+---
+
+<div
+  id="consent-banner"
+  class="fixed inset-x-0 bottom-0 z-[100] hidden border-t border-white/10 bg-neutral-950/95 p-4 text-neutral-100 backdrop-blur"
+>
+  <div class="mx-auto flex max-w-6xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <div class="text-sm text-neutral-200">
+      <p class="font-semibold">Cookies & externe Inhalte</p>
+      <p class="mt-1 text-neutral-300">
+        Wir verwenden nur notwendige Speicherung für die Website-Funktion. Externe Inhalte (YouTube, Google Maps) laden wir erst nach Zustimmung.
+      </p>
+      <p class="mt-1 text-xs text-neutral-400">
+        Du kannst deine Auswahl jederzeit unter “Cookie-Einstellungen” ändern.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+      <!-- Gleichwertige Buttons (wichtig) -->
+      <button
+        type="button"
+        data-consent="reject"
+        class="rounded-xl border border-white/15 px-4 py-2 text-sm text-neutral-100 hover:border-white/30"
+      >
+        Nur notwendig
+      </button>
+
+      <button
+        type="button"
+        data-consent="accept"
+        class="rounded-xl border border-white/15 px-4 py-2 text-sm text-neutral-100 hover:border-white/30"
+      >
+        Alle akzeptieren
+      </button>
+
+      <button
+        type="button"
+        data-consent="settings"
+        class="rounded-xl border border-white/15 px-4 py-2 text-sm text-neutral-100 hover:border-white/30"
+      >
+        Einstellungen
+      </button>
+    </div>
+  </div>
+
+  <!-- Mini Settings Row -->
+  <div id="consent-settings" class="mx-auto mt-3 hidden max-w-6xl rounded-2xl border border-white/10 bg-neutral-900/40 p-4">
+    <label class="flex items-center justify-between gap-3 text-sm">
+      <span>Externe Medien (YouTube / Google Maps)</span>
+      <input id="toggle-external" type="checkbox" class="h-5 w-5" />
+    </label>
+
+    <div class="mt-3 flex gap-2">
+      <button
+        type="button"
+        data-consent="save"
+        class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
+      >
+        Speichern
+      </button>
+      <button
+        type="button"
+        data-consent="close"
+        class="rounded-xl border border-white/15 px-4 py-2 text-sm text-neutral-100 hover:border-white/30"
+      >
+        Schließen
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const CONSENT_KEY = "gf_consent_v1";
+    const banner = document.getElementById("consent-banner");
+    const settings = document.getElementById("consent-settings");
+    const toggleExternal = document.getElementById("toggle-external");
+
+    const defaultConsent = { necessary: true, externalMedia: false };
+
+    function getConsent() {
+      try {
+        const raw = localStorage.getItem(CONSENT_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function setConsent(consent) {
+      localStorage.setItem(CONSENT_KEY, JSON.stringify(consent));
+      document.dispatchEvent(new CustomEvent("consentchange", { detail: consent }));
+    }
+
+    function showBanner() { banner?.classList.remove("hidden"); }
+    function hideBanner() { banner?.classList.add("hidden"); }
+
+    function openSettings() {
+      settings?.classList.remove("hidden");
+      const current = getConsent() || defaultConsent;
+      if (toggleExternal) toggleExternal.checked = !!current.externalMedia;
+    }
+
+    function closeSettings() {
+      settings?.classList.add("hidden");
+    }
+
+    // initial
+    const initial = getConsent();
+    if (!initial) showBanner();
+
+    banner?.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-consent]");
+      if (!btn) return;
+
+      const action = btn.getAttribute("data-consent");
+
+      if (action === "reject") {
+        setConsent({ necessary: true, externalMedia: false });
+        hideBanner();
+        closeSettings();
+      }
+
+      if (action === "accept") {
+        setConsent({ necessary: true, externalMedia: true });
+        hideBanner();
+        closeSettings();
+      }
+
+      if (action === "settings") openSettings();
+      if (action === "close") closeSettings();
+
+      if (action === "save") {
+        setConsent({
+          necessary: true,
+          externalMedia: !!toggleExternal?.checked
+        });
+        hideBanner();
+        closeSettings();
+      }
+    });
+
+    // expose helper for footer link
+    window.__openCookieSettings = () => {
+      showBanner();
+      openSettings();
+    };
+  })();
+</script>

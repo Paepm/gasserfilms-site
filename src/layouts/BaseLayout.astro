@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import ConsentBanner from "../components/ConsentBanner.astro";
+
 const { title = "Gasser Films", description = "" } = Astro.props;
 ---
 
@@ -15,11 +17,79 @@ const { title = "Gasser Films", description = "" } = Astro.props;
   </head>
 
   <body class="relative min-h-screen bg-neutral-950 text-neutral-100">
-  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-    <div class="absolute -top-40 left-1/2 h-[520px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-r from-fuchsia-500/15 via-red-500/10 to-orange-400/15 blur-3xl"></div>
-    <div class="absolute bottom-[-240px] right-[-240px] h-[520px] w-[520px] rounded-full bg-gradient-to-tr from-sky-500/10 via-indigo-500/10 to-purple-500/10 blur-3xl"></div>
-  </div>
+    <!-- Background glow -->
+    <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[520px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-r from-fuchsia-500/15 via-red-500/10 to-orange-400/15 blur-3xl"></div>
+      <div class="absolute bottom-[-240px] right-[-240px] h-[520px] w-[520px] rounded-full bg-gradient-to-tr from-sky-500/10 via-indigo-500/10 to-purple-500/10 blur-3xl"></div>
+    </div>
 
-  <slot />
-</body>
+    <slot />
+
+    <!-- Cookie / Consent Banner -->
+    <ConsentBanner />
+
+    <!-- External media gating (YouTube / Google Maps) -->
+    <script is:inline>
+      (() => {
+        const CONSENT_KEY = "gf_consent_v1";
+
+        function getConsent() {
+          try {
+            const raw = localStorage.getItem(CONSENT_KEY);
+            return raw ? JSON.parse(raw) : null;
+          } catch {
+            return null;
+          }
+        }
+
+        function mountEmbeds() {
+          const consent = getConsent();
+          const allowed = consent?.externalMedia === true;
+
+          if (!allowed) return;
+
+          document.querySelectorAll("[data-external-src]").forEach((host) => {
+            const alreadyMounted = host.getAttribute("data-mounted") === "1";
+            if (alreadyMounted) return;
+
+            const src = host.getAttribute("data-external-src");
+            if (!src) return;
+
+            const title = host.getAttribute("data-external-title") || "External content";
+            const allow = host.getAttribute("data-external-allow") || "";
+
+            const iframe = document.createElement("iframe");
+            iframe.src = src;
+            iframe.title = title;
+            iframe.loading = "lazy";
+            iframe.allowFullscreen = true;
+            iframe.referrerPolicy = "no-referrer-when-downgrade";
+            if (allow) iframe.setAttribute("allow", allow);
+            iframe.className = "h-full w-full";
+
+            host.innerHTML = "";
+            host.appendChild(iframe);
+            host.setAttribute("data-mounted", "1");
+          });
+        }
+
+        // Mount on load (if user already consented earlier)
+        window.addEventListener("DOMContentLoaded", mountEmbeds);
+
+        // Mount whenever consent changes (ConsentBanner dispatches this event)
+        document.addEventListener("consentchange", mountEmbeds);
+
+        // If user clicks "Load external media" button in a placeholder, enable external media
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest("[data-allow-external]");
+          if (!btn) return;
+
+          const consent = { necessary: true, externalMedia: true };
+          localStorage.setItem(CONSENT_KEY, JSON.stringify(consent));
+          document.dispatchEvent(new CustomEvent("consentchange", { detail: consent }));
+          mountEmbeds();
+        });
+      })();
+    </script>
+  </body>
 </html>

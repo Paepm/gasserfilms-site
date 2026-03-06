@@ -127,13 +127,26 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(CONTACT.addre
         </div>
 
         <div class="aspect-[16/10] w-full">
-          <iframe
-            class="h-full w-full"
-            src={mapSrc}
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title={`Google Maps: ${CONTACT.addressQuery}`}
-          />
+          <div
+            class="h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/40"
+            data-external-src={mapSrc}
+            data-external-title={`Google Maps: ${CONTACT.addressQuery}`}
+            data-external-allow=""
+          >
+            <div class="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
+              <p class="text-sm text-neutral-200">Google Maps ist blockiert.</p>
+              <p class="text-xs text-neutral-400">
+                Zum Laden musst du externe Medien erlauben (Cookies/DSGVO).
+              </p>
+              <button
+                type="button"
+                data-allow-external
+                class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
+              >
+                Karte laden
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="p-6">
