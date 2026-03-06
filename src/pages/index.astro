@@ -28,11 +28,21 @@ import Footer from "../components/Footer.astro";
     </section>
 
     <section class="pb-16">
-      <h2 class="text-xl font-semibold">Featured Projects</h2>
-      <div class="mt-6 grid gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 p-4">Project 1</div>
-        <div class="rounded-2xl border border-white/10 p-4">Project 2</div>
-        <div class="rounded-2xl border border-white/10 p-4">Project 3</div>
+      <h2 class="text-xl font-semibold">Showreel 2026</h2>
+
+      <!-- Wrapper: limits width + centers -->
+      <div class="mt-6 mx-auto max-w-6xl overflow-hidden bg-neutral-950">
+        <div class="aspect-video w-full">
+          <iframe
+            class="h-full w-full"
+            src="https://www.youtube-nocookie.com/embed/lYdHO-mGG3E?modestbranding=1&rel=0&controls=1&showinfo=0&fs=1"
+            title="Showreel 2026"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
       </div>
     </section>
   </main>
