@@ -17,11 +17,20 @@ const { title = "Gasser Films", description = "" } = Astro.props;
   </head>
 
   <body class="relative min-h-screen bg-neutral-950 text-neutral-100">
-    <!-- Background glow -->
-    <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <div class="absolute -top-40 left-1/2 h-[520px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-r from-fuchsia-500/15 via-red-500/10 to-orange-400/15 blur-3xl"></div>
-      <div class="absolute bottom-[-240px] right-[-240px] h-[520px] w-[520px] rounded-full bg-gradient-to-tr from-sky-500/10 via-indigo-500/10 to-purple-500/10 blur-3xl"></div>
-    </div>
+    <!-- Background glow (alternative, stronger + more cinematic) -->
+  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+    <!-- subtle global vignette -->
+    <div class="absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(244,63,94,0.10),transparent_60%),radial-gradient(900px_500px_at_10%_110%,rgba(56,189,248,0.10),transparent_60%),radial-gradient(800px_500px_at_90%_120%,rgba(168,85,247,0.10),transparent_60%)]"></div>
+
+    <!-- top hero glow -->
+    <div class="absolute -top-24 left-1/2 h-[520px] w-[1200px] -translate-x-1/2 rounded-full bg-gradient-to-r from-fuchsia-500/25 via-red-500/15 to-orange-400/20 blur-3xl"></div>
+
+    <!-- bottom left glow -->
+    <div class="absolute bottom-[-260px] left-[-260px] h-[640px] w-[640px] rounded-full bg-gradient-to-tr from-sky-500/18 via-indigo-500/14 to-purple-500/18 blur-3xl"></div>
+
+    <!-- small accent glow (optional) -->
+    <div class="absolute top-[35%] right-[-220px] h-[420px] w-[420px] rounded-full bg-gradient-to-tr from-amber-400/10 via-orange-500/10 to-fuchsia-500/12 blur-3xl"></div>
+  </div>
 
     <slot />
 
