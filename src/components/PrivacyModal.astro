@@ -1,0 +1,91 @@
+---
+/**
+ * Privacy modal popup (native <dialog>)
+ * Open via elements with [data-privacy-open]
+ */
+---
+
+<dialog
+  id="privacy-modal"
+  class="w-[min(900px,92vw)] rounded-2xl border border-white/10 bg-neutral-950 p-0 text-neutral-100 shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+>
+  <div class="flex items-center justify-between gap-3 border-b border-white/10 p-4">
+    <p class="text-sm font-semibold">Datenschutz</p>
+
+    <form method="dialog">
+      <button
+        class="rounded-xl border border-white/10 bg-neutral-900/60 px-3 py-2 text-sm text-neutral-200 hover:border-white/25 hover:text-white"
+        aria-label="Schließen"
+      >
+        Close
+      </button>
+    </form>
+  </div>
+
+  <!-- Scroll content -->
+  <div class="max-h-[75vh] overflow-auto p-6">
+    <!-- HIER deinen Datenschutz-Text rein (vom /privacy Inhalt) -->
+    <h2 class="text-base font-semibold">1. Verantwortlicher</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Christof Gasser
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">2. Hosting</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Diese Website wird über Cloudflare Pages ausgeliefert. Dabei können technisch notwendige
+      Zugriffsdaten (z. B. IP-Adresse) verarbeitet werden.
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">3. Cookies / LocalStorage</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Wir speichern deine Cookie-Einstellungen (Consent) lokal im Browser, damit wir deine Auswahl merken.
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">4. Externe Medien</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      YouTube-Videos und Google Maps werden erst nach Zustimmung geladen (Cookie-Einstellungen).
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">5. Kontakt</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Wenn du uns kontaktierst, verarbeiten wir die Daten zur Bearbeitung deiner Anfrage.
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">6. Rechte</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Du hast Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch.
+      Beschwerden: Österreichische Datenschutzbehörde (DSB).
+    </p>
+  </div>
+
+  <div class="border-t border-white/10 p-4 text-xs text-neutral-500">
+    Tipp: Du kannst jederzeit über „Cookie-Einstellungen“ externe Medien deaktivieren.
+  </div>
+</dialog>
+
+<script is:inline>
+  (() => {
+    const dlg = document.getElementById("privacy-modal");
+    if (!dlg) return;
+
+    // openers
+    document.querySelectorAll("[data-privacy-open]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (typeof dlg.showModal === "function") dlg.showModal();
+      });
+    });
+
+    // click outside to close
+    dlg.addEventListener("click", (e) => {
+      const rect = dlg.getBoundingClientRect();
+      const inDialog =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      if (!inDialog) dlg.close();
+    });
+  })();
+</script>

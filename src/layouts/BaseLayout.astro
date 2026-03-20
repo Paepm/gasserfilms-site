@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import ConsentBanner from "../components/ConsentBanner.astro";
+import PrivacyModal from "../components/PrivacyModal.astro";
+import ImprintModal from "../components/ImprintModal.astro";
 
 const { title = "Gasser Films", description = "" } = Astro.props;
 ---
@@ -36,6 +38,12 @@ const { title = "Gasser Films", description = "" } = Astro.props;
 
     <!-- Cookie / Consent Banner -->
     <ConsentBanner />
+
+    <!-- Privacy Modal -->
+    <PrivacyModal />
+
+    <!-- Imprint Modal -->
+    <ImprintModal />
 
     <!-- External media gating (YouTube / Google Maps) -->
     <script is:inline>

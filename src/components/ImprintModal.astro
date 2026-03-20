@@ -1,0 +1,121 @@
+---
+/**
+ * Imprint modal popup (native <dialog>)
+ * Open via elements with [data-imprint-open]
+ *
+ * Austrian imprint template (replace placeholders).
+ */
+---
+
+<dialog
+  id="imprint-modal"
+  class="fixed left-1/2 top-1/2 w-[min(900px,92vw)] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/10 bg-neutral-950 p-0 text-neutral-100 shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm"
+>
+  <div class="flex items-center justify-between gap-3 border-b border-white/10 p-4">
+    <p class="text-sm font-semibold">Impressum</p>
+
+    <form method="dialog">
+      <button
+        class="rounded-xl border border-white/10 bg-neutral-900/60 px-3 py-2 text-sm text-neutral-200 hover:border-white/25 hover:text-white"
+        aria-label="Schließen"
+      >
+        Close
+      </button>
+    </form>
+  </div>
+
+  <!-- Scroll content -->
+  <div class="max-h-[75vh] overflow-auto p-6">
+    <h2 class="text-base font-semibold">Angaben gemäß § 5 ECG / § 14 UGB / § 63 GewO</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      <strong>[Gasser Films / Christof Gasser]</strong><br />
+      [Straße Hausnummer]<br />
+      [PLZ Ort], Österreich
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Kontakt</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      E-Mail: <a class="underline decoration-white/20 underline-offset-4 hover:decoration-white/50" href="mailto:[E-MAIL]">[E-MAIL]</a><br />
+      Telefon: <a class="underline decoration-white/20 underline-offset-4 hover:decoration-white/50" href="tel:[TEL]">[TEL]</a>
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Unternehmensangaben</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Rechtsform: [Einzelunternehmer / GmbH / …]<br />
+      Firmenbuch: [FN …] (falls vorhanden)<br />
+      Firmenbuchgericht: [z. B. Landesgericht …] (falls vorhanden)<br />
+      UID-Nr.: [ATU…] (falls vorhanden)<br />
+      Aufsichtsbehörde: [z. B. Bezirkshauptmannschaft …] (falls zutreffend)<br />
+      Gewerbe: [z. B. Filmproduktion / Medienproduktion …] (falls zutreffend)<br />
+      Gewerbeordnung: <span class="text-neutral-400">www.ris.bka.gv.at</span>
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Mitgliedschaften</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      [z. B. Wirtschaftskammer Österreich (WKO), Fachgruppe …] (falls zutreffend)
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Haftung für Inhalte</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Wir entwickeln die Inhalte dieser Website laufend weiter und bemühen uns, korrekte und aktuelle Informationen bereitzustellen.
+      Wir übernehmen jedoch keine Haftung für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte, insbesondere für jene,
+      die von Dritten bereitgestellt wurden.
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Haftung für Links</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Diese Website enthält Links zu externen Websites Dritter. Für die Inhalte dieser verlinkten Websites ist stets der jeweilige Anbieter
+      oder Betreiber verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Bei Bekanntwerden von Rechtsverletzungen
+      werden wir derartige Links umgehend entfernen.
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Urheberrecht</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Alle Inhalte dieser Website (Texte, Bilder, Videos, Grafiken) unterliegen – soweit rechtlich möglich – dem Urheberrecht.
+      Jede Verwendung, Vervielfältigung oder Verbreitung bedarf der vorherigen schriftlichen Zustimmung des Rechteinhabers.
+      Solltest du auf dieser Website Inhalte finden, die das Urheberrecht verletzen, bitten wir um Hinweis.
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Bild-/Videonachweise</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Inhalte/Medien: [eigene Produktionen / Kund:innenmaterial / Stock-Anbieter …]<br />
+      Logos/Marken: Eigentum der jeweiligen Markeninhaber.
+    </p>
+
+    <h2 class="mt-6 text-base font-semibold">Online-Streitbeilegung</h2>
+    <p class="mt-2 text-sm text-neutral-300">
+      Verbraucher haben die Möglichkeit, Beschwerden an die Online-Streitbeilegungsplattform der EU zu richten:
+      <span class="text-neutral-400">https://ec.europa.eu/odr</span><br />
+      Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+    </p>
+  </div>
+
+  <div class="border-t border-white/10 p-4 text-xs text-neutral-500">
+    Hinweis: Bitte Platzhalterfelder (in eckigen Klammern) mit echten Unternehmensdaten ersetzen.
+  </div>
+</dialog>
+
+<script is:inline>
+  (() => {
+    const dlg = document.getElementById("imprint-modal");
+    if (!dlg) return;
+
+    document.querySelectorAll("[data-imprint-open]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (typeof dlg.showModal === "function") dlg.showModal();
+      });
+    });
+
+    dlg.addEventListener("click", (e) => {
+      const rect = dlg.getBoundingClientRect();
+      const inDialog =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      if (!inDialog) dlg.close();
+    });
+  })();
+</script>
